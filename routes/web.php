@@ -29,6 +29,7 @@ Route::resource('/guru', GuruController::class);
 
 Route::resource('/kelas', KelasController::class);
 
+Route::resource('/mapel/data', [MapelController::class, 'data'])->name('mapel.data');
 Route::resource('/mapel', MapelController::class);
 
 Route::resource('/siswa', SiswaController::class);

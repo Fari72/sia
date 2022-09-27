@@ -48,10 +48,12 @@
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$item->nama}}</td>
                                         <td>
-                                            <button onclick="editData()" class="btn btn-flat btn-xs btn-warning"><i class="fa 
+                                            <button onclick="editData('{{route('mapel.update', $item->id)}}')" 
+                                                class="btn btn-flat btn-xs btn-warning"><i class="fa 
                                                 fa-edit"></i></button>
-                                            <a href="#" class="btn btn-flat btn-xs btn-danger"><i class="fa 
-                                                fa-trash"></i></a>
+                                            <button onclick="deleteData('{{route('mapel.destroy', $item->id)}}')"
+                                                class="btn btn-flat btn-xs btn-danger"><i class="fa 
+                                                fa-trash "></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -62,19 +64,84 @@
                 </div>
 
             </section>
-            @includeIf('kelas.form')
+            @includeIf('mapel.form')
 @endsection
 
 @push('script')
     <script>
+
+        let table;
+
+        $(function(){
+            table = $('.table').DataTable({
+                proccesing: true,
+                autowidth: false,
+                ajax: {
+                    url: '{{route('mapel.data')}}'
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'nama'},
+                ]
+            });
+        })
+
+        $('#modalForm').on('submit',function(e){
+            if(! e.preventDefault()){
+                $.post($('#modalForm').attr('action'),$('#modalForm form').serialize())
+                .done((response) => {
+                    $('#modalForm').modal('hide');
+                    table.ajax.reload();
+                })
+                .fail((errors) => {
+                    alert('Tidak Dapat Menyimpan Data');
+                    return;
+                })
+            }
+        })
+
         function addForm(url){
             $('#modalForm').modal('show');
             $('#modalForm .modal-title').text('Tambah Data Kelas');
+            
+            $('#modalForm form')[0].reset();
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('post');
         }
 
         function editData(url){
             $('#modalForm').modal('show');
             $('#modalForm .modal-title').text('Edit Data Kelas');
+
+            $('#modalForm form')[0].reset();
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('put');
+
+            $.get(url)
+                .done((response) => {
+                    $('#modalForm [name=nama]').val(response.nama);
+                })
+                .fail((errors) => {
+                    alert('Tidak Dapat Menampilkan Data');
+                    return;
+                })
+        }
+
+        function deleteData(url){
+            if(confirm('Yakin Akan Menghapus Data?')){
+                $.post(url, {
+                    'token': $('[name=csrf-token]').attr('content'),
+                    '_method': 'delete'
+                })
+                .done((response) => {
+                    alert('Data Berhasil di Hapus');
+                    return;
+                })
+                .fail((errors) => {
+                    alert('Data Gagal di Hapus!');
+                    return;
+                })
+            }
         }
     </script>
 @endpush
