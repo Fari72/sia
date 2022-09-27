@@ -1,6 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\
+{
+    GuruController,
+    KelasController,
+    MapelController,
+    SiswaController,
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +21,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layout.app');
 });
+
+
+Route::resource('/guru', GuruController::class);
+
+Route::resource('/kelas', KelasController::class);
+
+Route::resource('/mapel', MapelController::class);
+
+Route::resource('/siswa', SiswaController::class);
