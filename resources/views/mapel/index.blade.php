@@ -28,13 +28,12 @@
                         <h3 class="card-title">Data Mapel</h3>
                         <div class="card-tools">
                             
-                            <button type="button" onclick="addForm('{{route('mapel.store')}}')" class="btn btn-tool">
-                                <i class="fas fa-plus"></i>
+                            <button type="button" onclick="addForm('{{route('mapel.store')}}')" class="btn btn-tool"><i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover text-nowrap">
+                        <table class="table table-hover text-nowrap" style = "width:100%">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -42,22 +41,6 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($mapel as $item)
-                                    <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$item->nama}}</td>
-                                        <td>
-                                            <button onclick="editData('{{route('mapel.update', $item->id)}}')" 
-                                                class="btn btn-flat btn-xs btn-warning"><i class="fa 
-                                                fa-edit"></i></button>
-                                            <button onclick="deleteData('{{route('mapel.destroy', $item->id)}}')"
-                                                class="btn btn-flat btn-xs btn-danger"><i class="fa 
-                                                fa-trash "></i></button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
                         </table>
                     </div>
 
@@ -68,7 +51,7 @@
 @endsection
 
 @push('script')
-    <script>
+<script>
 
         let table;
 
@@ -77,12 +60,13 @@
                 proccesing: true,
                 autowidth: false,
                 ajax: {
-                    url: '{{route('mapel.data')}}'
+                    url: "{{route('mapel.data')}}"
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
                     {data: 'nama'},
-                ]
+                    {data: 'aksi'},
+                ],
             });
         })
 
@@ -92,9 +76,19 @@
                 .done((response) => {
                     $('#modalForm').modal('hide');
                     table.ajax.reload();
+                    
+                    iziToast.success({
+                        title: "Sukses",
+                        text: "Data Berhasil disimpan",
+                        position: "topRight",
+                    })
                 })
                 .fail((errors) => {
-                    alert('Tidak Dapat Menyimpan Data');
+                    iziToast.error({
+                        title: "Gagal",
+                        text: "Data Gagal disimpan",
+                        position: "topRight",
+                    })
                     return;
                 })
             }
@@ -128,20 +122,37 @@
         }
 
         function deleteData(url){
-            if(confirm('Yakin Akan Menghapus Data?')){
-                $.post(url, {
-                    'token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
+            swal({
+                    title: "Yakin ingin menghapus data ini?",
+                    text: "Jika klik OK! maka data akan terhapus!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
                 })
-                .done((response) => {
-                    alert('Data Berhasil di Hapus');
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.post(url, {
+                    'token': $('[name=csrf-token]').attr('content'),
+                    '_method': 'delete',
+                    })
+                    .done((response) => {
+                    swal({
+                        title: "Sukses",
+                        text: "Data Berhasil dihapus",
+                        icon: "success",
+
+                    });
                     return;
                 })
                 .fail((errors) => {
-                    alert('Data Gagal di Hapus!');
+                    title: "Gagal",
+                    text: "Data Gagal dihapus",
+                    icon: "error",
                     return;
                 })
-            }
+                table.ajax.reload();
+
+                });
         }
     </script>
 @endpush

@@ -21,11 +21,20 @@ class MapelController extends Controller
 
     public function data()
     {
-        $mapel = Mapel::orderBy('id','desc')->get();
+        $mapel = Mapel::orderBy('id', 'desc')->get();
 
         return datatables()
             ->of($mapel)
             ->addIndexColumn()
+            ->addColumn('aksi', function($mapel){
+                return '
+                <div class="btn-group">
+                <button onclick="editData(`'.route('mapel.update', $mapel->id).'`)" class="btn btn-flat btn-xs btn-warning"><i class="fa fa-edit"></i></button>
+                <button onclick="deleteData(`'.route('mapel.destroy', $mapel->id).'`)"class="btn btn-flat btn-xs btn-danger"><i class="fa fa-trash "></i></button>
+                </div>
+                ';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
 
@@ -62,7 +71,7 @@ class MapelController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data Berhasil Tersimpan',
-            'data' => $mapel
+            'data' => $mapel,
         ]);
     }
         
@@ -99,8 +108,8 @@ class MapelController extends Controller
     public function update(Request $request, $id)
     {
         $mapel = Mapel::find($id);
-        $mapel->nama = $request->nama;
-        $mapel->update();
+        $mapel -> nama = $request->nama;
+        $mapel -> update();
 
         return response()->json('Data Berhasil Disimpan');
     }

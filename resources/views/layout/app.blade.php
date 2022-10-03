@@ -19,8 +19,11 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" 
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
          crossorigin="anonymous" referrerpolicy="no-referrer" />
+         
+        {{-- Izitoast --}}
+        <link rel="stylesheet" href="{{asset('asset/izitoast/iziToast.min.css')}}">
 
-    <link rel="stylesheet" href="{{asset('asset/css/adminlte.min.css')}}">
+        <link rel="stylesheet" href="{{asset('asset/css/adminlte.min.css')}}">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -102,6 +105,11 @@
     <script src="{{asset('/asset/datatable/responsive.bootstrap4.min.js')}}"></script>
     @stack('script')
     
+    {{-- sweetalert --}}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    {{-- Izitoast --}}
+    <script src="{{asset('/asset/izitoast/iziToast.min.js')}}"></script>
 </body>
 
 </html>

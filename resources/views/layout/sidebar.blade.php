@@ -22,7 +22,7 @@
                 data-accordion="false">
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link {{request()->is('dashboard*') ? 'active':''}}">
                         <i class="nav-icon fas fa-tachometer-alt nav-item"></i>
                         <p>
                             Dashboard
@@ -32,7 +32,7 @@
 
                 <li class="nav-header">MASTER
                     <li class="nav-item">
-                        <a href="{{route('guru.index')}}" class="nav-link">
+                        <a href="{{route('guru.index')}}" class="nav-link {{request()->is('guru*') ? 'active':''}}">
                             <i class="fas fa-user-graduate nav-icon"></i>
                             <p>
                                 Guru
@@ -41,7 +41,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{route('kelas.index')}}" class="nav-link">
+                        <a href="{{route('kelas.index')}}" class="nav-link {{request()->is('kelas*') ? 'active':''}}" >
                             <i class="fas fa-chalkboard nav-icon"></i>
                             <p>
                                 Kelas
@@ -50,7 +50,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{route('mapel.index')}}" class="nav-link">
+                        <a href="{{route('mapel.index')}}" class="nav-link {{request()->is('mapel*') ? 'active':''}}">
                             <i class="fas fa-book nav-icon" ></i>
                             <p>
                                 Mapel
@@ -59,7 +59,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{route('siswa.index')}}" class="nav-link">
+                        <a href="{{route('siswa.index')}}" class="nav-link {{request()->is('siswa*') ? 'active':''}}">
                             <i class="fas fa-user nav-icon"></i>
                             <p>
                                 Siswa
