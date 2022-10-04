@@ -81,9 +81,9 @@
 
             </section> --}}
 
+            @include('layout.footer')
+            
         </div>
-
-        @include('layout.footer')
 
         <aside class="control-sidebar control-sidebar-dark">
 

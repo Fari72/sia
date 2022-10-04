@@ -13,7 +13,7 @@
                 <img src="" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Fari</a>
+                <a href="#" class="d-block">{{Auth()->user()->name}}</a>
             </div>
         </div>
 
@@ -22,7 +22,7 @@
                 data-accordion="false">
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{request()->is('dashboard*') ? 'active':''}}">
+                    <a href="/dashboard" class="nav-link {{request()->is('dashboard*') ? 'active':''}}">
                         <i class="nav-icon fas fa-tachometer-alt nav-item"></i>
                         <p>
                             Dashboard

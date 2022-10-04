@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover text-nowrap">
+                        <table class="table table-hover text-nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -46,24 +46,6 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($siswa as $item)
-                                    <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$item->nama}}</td>
-                                        <td>{{$item->jenis_kelamin}}</td>
-                                        <td>{{$item->alamat}}</td>
-                                        <td>{{$item->kelas_id}}</td>
-                                        <td>{{$item->mapel_id}}</td>
-                                        <td>
-                                            <button onclick="editData()" class="btn btn-flat btn-xs btn-warning"><i class="fa 
-                                                fa-edit"></i></button>
-                                            <a href="#" class="btn btn-flat btn-xs btn-danger"><i class="fa 
-                                                fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
                         </table>
                     </div>
 
@@ -74,15 +56,93 @@
 @endsection
 
 @push('script')
-    <script>
+<script>
+    
+    let table;
+
+        $(function(){
+            table = $('.table').DataTable({
+                proccesing: true,
+                autowidth: false,
+                ajax: {
+                    url: "{{route('siswa.data')}}"
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'nama'},
+                    {data: 'aksi'},
+                ],
+            });
+        });
+
+        $('#modalForm').on('submit',function(e){
+            if(! e.preventDefault()){
+                $.post($('#modalForm').attr('action'),$('#modalForm form').serialize())
+                .done((response) => {
+                    $('#modalForm').modal('hide');
+                    table.ajax.reload();
+                    
+                    iziToast.success({
+                        title: "Sukses",
+                        text: "Data Berhasil disimpan",
+                        position: "topRight",
+                    })
+                })
+                .fail((errors) => {
+                    iziToast.error({
+                        title: "Gagal",
+                        text: "Data Gagal disimpan",
+                        position: "topRight",
+                    })
+                    return;
+                })
+            }
+        })
+
         function addForm(url){
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Tambah Data Siswa');
+            $('#modalForm .modal-title').text('Tambah Data Kelas');
+            
+            $('#modalForm form')[0].reset();
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('post');
         }
 
         function editData(url){
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Edit Data Siswa');
+            $('#modalForm .modal-title').text('Edit Data Kelas');
+
+            $('#modalForm form')[0].reset();
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('put');
+
+            $.get(url)
+                .done((response) => {
+                    $('#modalForm [name=nama]').val(response.nama);
+                })
+                .fail((errors) => {
+                    alert('Tidak Dapat Menampilkan Data');
+                    return;
+                })
         }
-    </script>
+
+        function deleteData(url){
+            swal({
+                title: "Yakin ingin menghapus data ini?",
+                text: "Jika klik OK! maka data akan terhapus!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    swal("Your imaginary file has been deleted!", {
+                    icon: "success",
+                    });
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
+                });
+            }
+</script>
 @endpush

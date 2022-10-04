@@ -7,29 +7,36 @@ use App\Http\Controllers\
     KelasController,
     MapelController,
     SiswaController,
+    DashboardController,
+    AuthController,
 };
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return view('layout.app');
 });
 
+//route login
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/postlogin', [AuthController::class, 'postlogin'])->name('login.postlogin');
 
-Route::resource('/guru', GuruController::class);
+//route logout
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::resource('/kelas', KelasController::class);
+Route::group(['middleware'=>'auth'], function(){
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    
+    Route::get('/guru/data', [guruController::class, 'data'])->name('guru.data');
+    Route::resource('/guru', GuruController::class);
+    
+    Route::get('/kelas/data', [kelasController::class, 'data'])->name('kelas.data');
+    Route::resource('/kelas', KelasController::class);
+    
+    Route::get('/mapel/data', [MapelController::class, 'data'])->name('mapel.data');
+    Route::resource('/mapel', MapelController::class);
+    
+    Route::get('/siswa/data', [siswaController::class, 'data'])->name('siswa.data');
+    Route::resource('/siswa', SiswaController::class);
 
-Route::resource('/mapel/data', [MapelController::class, 'data'])->name('mapel.data');
-Route::resource('/mapel', MapelController::class);
-
-Route::resource('/siswa', SiswaController::class);
+});

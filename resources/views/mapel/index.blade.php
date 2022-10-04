@@ -51,7 +51,7 @@
 @endsection
 
 @push('script')
-<script>
+    <script>
 
         let table;
 
@@ -68,7 +68,7 @@
                     {data: 'aksi'},
                 ],
             });
-        })
+        });
 
         $('#modalForm').on('submit',function(e){
             if(! e.preventDefault()){
@@ -123,36 +123,22 @@
 
         function deleteData(url){
             swal({
-                    title: "Yakin ingin menghapus data ini?",
-                    text: "Jika klik OK! maka data akan terhapus!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
+                title: "Yakin ingin menghapus data ini?",
+                text: "Jika klik OK! maka data akan terhapus!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
                 })
                 .then((willDelete) => {
-                    if (willDelete) {
-                        $.post(url, {
-                    'token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete',
-                    })
-                    .done((response) => {
-                    swal({
-                        title: "Sukses",
-                        text: "Data Berhasil dihapus",
-                        icon: "success",
-
+                if (willDelete) {
+                    swal("Your imaginary file has been deleted!", {
+                    icon: "success",
                     });
-                    return;
-                })
-                .fail((errors) => {
-                    title: "Gagal",
-                    text: "Data Gagal dihapus",
-                    icon: "error",
-                    return;
-                })
-                table.ajax.reload();
-
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
                 });
-        }
+            }
+            
     </script>
 @endpush
