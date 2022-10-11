@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
-use Illuminate\Http\Request;
+use App\Models\Kelas;
+use App\Models\Mapel;
+use App\Models\User;
 use Validator;
-
+use Str;
+use Illuminate\Http\Request;
 class SiswaController extends Controller
 {
     /**
@@ -26,7 +29,19 @@ class SiswaController extends Controller
         return datatable()
         ->of($siswa)
         ->addIndexColumn()
-        ->addColumn('aksi', function($siswa){
+        ->editColumn('nama', function($siswa){
+            return'
+            <a href="/siswa/profile/'.$siswa->id.'">'.$siswa->nama.'</a>
+            ';
+
+        })
+        ->editColumn('mapel_id', function($siswa){
+            return !empty($siswa->mapel->nama) ? $siswa->mapel->nama : 'data belum di input';
+        })
+        ->editColumn('kelas_id', function($siswa){
+            return !empty($siswa->kelas->nama) ? $siswa->kelas->nama : 'data belum di input';
+        })
+        ->editColumn('aksi', function($siswa){
             return '
             <div class="btn-group">
             <button onclick="editData(`'.route('siswa.update', $siswa->id).'`)" class="btn btn-flat btn-xs btn-warning"><i class="fa fa-edit"></i></button>
@@ -34,7 +49,7 @@ class SiswaController extends Controller
             </div>
             ';
         })
-        ->rawColumns(['aksi'])
+        ->rawColumns(['aksi','mapel_id','kelas_id','nama'])
         ->make(true);
     }
 
@@ -56,25 +71,29 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'nama' => 'required',
-            'jenis_kelamin' => 'required',
-            'alamat' => 'required',
-            'kelas_id' => 'required',
-            'mapel_id' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(),[
+        //     'nama' => 'required',
+        //     'jenis_kelamin' => 'required',
+        //     'alamat' => 'required',
+        //     'kelas_id' => 'required',
+        //     'mapel_id' => 'required',
+        // ]);
 
         if($validator->fails()){
             return respons()->json($validator->errors(), 422);
         }
         
-        $siswa = Siswa::create([
-            'nama' => $request->nama,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'alamat' => $request->alamat,
-            'kelas_id' => $request->kelas_id,
-            'mapel_id' => $request->mapel_id,
-        ]);
+        
+        $user = new User;
+        $user->role = 'siswa';
+        $user->name = $request->nama;
+        $user->email = $request->email;
+        $user->password = bcrypt('rahasia');
+        $user->remember_token = Str::random(20);
+        $user->save();
+        
+        $request->request->add(['user_id' => $user->id]);
+        $siswa = Siswa::create($request->all());
 
         return response()->json([
             'success' => true,
@@ -136,4 +155,11 @@ class SiswaController extends Controller
 
         return response()->json(null,204);
     }
+
+public function profile($id)
+{
+    $siswa = Siswa::find($id);
+    return view('siswa.profile');
+}
+
 }

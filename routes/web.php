@@ -11,7 +11,6 @@ use App\Http\Controllers\
     AuthController,
 };
 
-
 Route::get('/', function () {
     return view('layout.app');
 });
@@ -23,9 +22,7 @@ Route::post('/postlogin', [AuthController::class, 'postlogin'])->name('login.pos
 //route logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::group(['middleware'=>'auth'], function(){
-    
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::group(['middleware'=>['auth', 'checkRole:admin']], function(){
     
     Route::get('/guru/data', [guruController::class, 'data'])->name('guru.data');
     Route::resource('/guru', GuruController::class);
@@ -36,7 +33,14 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/mapel/data', [MapelController::class, 'data'])->name('mapel.data');
     Route::resource('/mapel', MapelController::class);
     
-    Route::get('/siswa/data', [siswaController::class, 'data'])->name('siswa.data');
+    Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
     Route::resource('/siswa', SiswaController::class);
+    Route::get('/siswa/profile/{id}', [SiswaController::class, 'profile'])->name('siswa.profile');
+
+});
+
+Route::group(['middleware'=>['auth', 'checkRole:admin, siswa']], function(){
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 });

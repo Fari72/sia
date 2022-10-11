@@ -18,7 +18,7 @@
                         <input type="text" class="form-control" name="nama" id="nama">
                         
                         <label for="Jenis_kelamin">Jenis Kelamin</label>
-                        <select type="text" class="form-control" name="jenis_kelamin" id="jenis_kelamin"></select>
+                        <select type="enum" class="form-control" name="jenis_kelamin" id="jenis_kelamin"></select>
                         
                         <label for="mapel_id">Mapel</label>
                         <select type="text" class="form-control" name="mapel_id" id="mapel_id"></select>

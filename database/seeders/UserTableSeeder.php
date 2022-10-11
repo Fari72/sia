@@ -19,7 +19,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Administrator',
             'email' => 'admin@sia.test',
             'password' => bcrypt('password'),
-            'remember_token' => Str::random(20)
+            'remember_token' => Str::random(20),
         ]);
     }
 }

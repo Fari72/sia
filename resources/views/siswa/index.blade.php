@@ -22,7 +22,6 @@
             </section>
 
             <section class="content">
-
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Data Siswa</h3>
@@ -48,7 +47,6 @@
                             </thead>
                         </table>
                     </div>
-
                 </div>
 
             </section>
@@ -70,6 +68,10 @@
                 columns: [
                     {data: 'DT_RowIndex'},
                     {data: 'nama'},
+                    {data: 'jenis_kelamin'},
+                    {data: 'alamat'},
+                    {data: 'kelas_id'},
+                    {data: 'mapel_id'},
                     {data: 'aksi'},
                 ],
             });

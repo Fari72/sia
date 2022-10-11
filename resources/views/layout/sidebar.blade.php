@@ -30,6 +30,7 @@
                     </a>
                 </li>
 
+                @if(auth()->user()->role == 'admin')
                 <li class="nav-header">MASTER
                     <li class="nav-item">
                         <a href="{{route('guru.index')}}" class="nav-link {{request()->is('guru*') ? 'active':''}}">
@@ -67,6 +68,7 @@
                         </a>
                     </li>
                 </li>
+                @endif
             </ul>
         </nav>
 
