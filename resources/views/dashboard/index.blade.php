@@ -56,8 +56,8 @@ Dashboard
                     </div>
                     <a href="/kelas" class="small-box-footer nav-link">More info<i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-
             </div>
+
 
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
@@ -86,6 +86,15 @@ Dashboard
                             <th>Guru</th>
                         </tr>
                     </thead>
+
+                    <tbody>
+                        @foreach ($find_siswa as $item)
+                            <tr>
+                                <td>{{$item->mapel->nama}}</td>
+                                <td>{{$item->kelas->nama}}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
                 </div>
             </div>
 

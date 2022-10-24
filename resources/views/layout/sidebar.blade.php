@@ -13,7 +13,7 @@
                 <img src="" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{Auth()->user()->name}}</a>
+                <a href="#" class="d-block">{!empty{Auth()->user()->name()->role == 'admin'} ? auth()->user()->role == 'admin': ''}</a>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
                     </a>
                 </li>
 
-                @if(auth()->user()->role == 'admin')
+                @if(!empty(auth()->user()->role == 'admin') ? auth()->user()->role == 'admin': '')
                 <li class="nav-header">MASTER
                     <li class="nav-item">
                         <a href="{{route('guru.index')}}" class="nav-link {{request()->is('guru*') ? 'active':''}}">
